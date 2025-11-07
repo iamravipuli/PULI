@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
             showDatePicker { selectedDate ->
                 binding.txtDate1.text = dateFormat.format(selectedDate)
                 date1 = selectedDate
-                updateDuration(date1, date2)
             }
         }
 
@@ -33,7 +32,6 @@ class MainActivity : AppCompatActivity() {
             showDatePicker { selectedDate ->
                 binding.txtDate2.text = dateFormat.format(selectedDate)
                 date2 = selectedDate
-                updateDuration(date1, date2)
             }
         }
 
@@ -42,29 +40,22 @@ class MainActivity : AppCompatActivity() {
             val roi = binding.edtRate.text.toString().toDoubleOrNull() ?: 0.0
 
             if (date1 == null || date2 == null) {
-                binding.txtResult.text = "Please select both dates."
                 return@setOnClickListener
             }
 
             val daysBetween = ((date2!!.time - date1!!.time) / (1000 * 60 * 60 * 24)).toInt()
             if (daysBetween < 0) {
-                binding.txtResult.text = "End date must be after start date."
                 return@setOnClickListener
             }
 
-            // Calculate Simple Interest where ROI = ₹ per ₹100 per month (≈30 days)
+            // Simple Interest: (P × R × T) / (100 × 30) → since R = ₹ per ₹100 per month (~30 days)
             val interest = (amount * roi * daysBetween) / (100 * 30)
             val total = amount + interest
 
-            val duration = convertDays(daysBetween)
-
+            // Update UI with distinct colors
             binding.txtPrincipal.text = "Principal Amount: ₹${"%.2f".format(amount)}"
-            binding.txtDuration.text =
-                "Duration: ${duration["years"]} years, ${duration["months"]} months, ${duration["days"]} days"
+            binding.txtInterest.text = "Interest Amount: ₹${"%.2f".format(interest)}"
             binding.txtTotal.text = "Total Amount (P + I): ₹${"%.2f".format(total)}"
-
-            binding.txtResult.text =
-                "Interest for $daysBetween days = ₹${"%.2f".format(interest)}"
         }
     }
 
@@ -81,22 +72,5 @@ class MainActivity : AppCompatActivity() {
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
         ).show()
-    }
-
-    private fun convertDays(days: Int): Map<String, Int> {
-        val years = floor(days / 365.0).toInt()
-        val months = floor((days % 365) / 30.0).toInt()
-        val remainingDays = (days - (years * 365) - (months * 30))
-        return mapOf("years" to years, "months" to months, "days" to remainingDays)
-    }
-
-    private fun updateDuration(date1: Date?, date2: Date?) {
-        if (date1 == null || date2 == null) return
-        val daysBetween = ((date2.time - date1.time) / (1000 * 60 * 60 * 24)).toInt()
-        if (daysBetween >= 0) {
-            val duration = convertDays(daysBetween)
-            binding.txtDuration.text =
-                "Duration: ${duration["years"]} years, ${duration["months"]} months, ${duration["days"]} days"
-        }
     }
 }

@@ -14,6 +14,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.US)
 
+    // Store selected dates to restore in picker
+    private var selectedDate1: Date? = null
+    private var selectedDate2: Date? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -21,6 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         setupInputFilters()
         setupDatePickers()
+        setupClearDateListeners() // Optional: sync clear with stored dates
 
         binding.btnCalculate.setOnClickListener {
             validateAndCalculate()
@@ -28,10 +33,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupInputFilters() {
-        // Principal: max 7 digits, integers only
         binding.edtAmount.filters = arrayOf(android.text.InputFilter.LengthFilter(7))
 
-        // ROI: max 2 digits before decimal, max 2 after
         binding.edtRate.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -52,7 +55,6 @@ class MainActivity : AppCompatActivity() {
                     corrected = before + "." + after.take(2)
                 }
 
-                // Prevent leading zeros like "00.5" → becomes "0.5"
                 if (before.length > 1 && before.startsWith("0")) {
                     corrected = before.drop(1)
                     if (after.isNotEmpty()) corrected += "." + after.take(2)
@@ -70,15 +72,38 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupDatePickers() {
         binding.edtDate1.setOnClickListener {
-            showDatePicker { date ->
+            val initialDate = selectedDate1 ?: Date()
+            showDatePicker(initialDate) { date ->
+                selectedDate1 = date
                 binding.edtDate1.setText(dateFormat.format(date))
             }
         }
+
         binding.edtDate2.setOnClickListener {
-            showDatePicker { date ->
+            val initialDate = selectedDate2 ?: Date()
+            showDatePicker(initialDate) { date ->
+                selectedDate2 = date
                 binding.edtDate2.setText(dateFormat.format(date))
             }
         }
+    }
+
+    private fun setupClearDateListeners() {
+        binding.edtDate1.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                if (s.isNullOrEmpty()) selectedDate1 = null
+            }
+        })
+
+        binding.edtDate2.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                if (s.isNullOrEmpty()) selectedDate2 = null
+            }
+        })
     }
 
     private fun validateAndCalculate() {
@@ -87,7 +112,6 @@ class MainActivity : AppCompatActivity() {
         val date1Str = binding.edtDate1.text.toString().trim()
         val date2Str = binding.edtDate2.text.toString().trim()
 
-        // Validate all inputs
         if (amountStr.isEmpty()) {
             binding.txtResult.text = "⚠️ Enter Principal Amount"
             return
@@ -105,10 +129,8 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        // Hide keyboard only when all inputs are valid
         hideKeyboard()
 
-        // Parse values
         val amount = amountStr.toDoubleOrNull() ?: run {
             binding.txtResult.text = "⚠️ Invalid amount"
             return
@@ -140,7 +162,7 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        // ✅ INCLUSIVE: +1 day
+        // ✅ Inclusive: +1 day
         val daysBetween = (date2.time - date1.time) / (24 * 60 * 60 * 1000) + 1
         val interest = (amount * roi * daysBetween) / (100 * 30)
         val total = amount + interest
@@ -150,7 +172,6 @@ class MainActivity : AppCompatActivity() {
         binding.txtInterest.text = "₹${formatIndianNumber(interest)}"
         binding.txtTotal.text = "₹${formatIndianNumber(total)}"
 
-        // Duration approximation
         val years = daysBetween / 365
         val rem = (daysBetween % 365).toInt()
         val months = rem / 30
@@ -160,13 +181,17 @@ class MainActivity : AppCompatActivity() {
         binding.txtResult.text = "✓ Calculated for $daysBetween day(s)"
     }
 
-    private fun showDatePicker(onSelected: (Date) -> Unit) {
+    private fun showDatePicker(initialDate: Date, onSelected: (Date) -> Unit) {
         val cal = Calendar.getInstance()
+        cal.time = initialDate
+
         DatePickerDialog(
             this,
-            { _, y, m, d ->
+            { _, year, month, day ->
                 val selected = Calendar.getInstance().apply {
-                    set(y, m, d)
+                    set(Calendar.YEAR, year)
+                    set(Calendar.MONTH, month)
+                    set(Calendar.DAY_OF_MONTH, day)
                     set(Calendar.HOUR_OF_DAY, 0)
                     set(Calendar.MINUTE, 0)
                     set(Calendar.SECOND, 0)
@@ -186,14 +211,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun formatIndianNumber(value: Double): String {
-        // Round to nearest whole number
         val whole = Math.round(value).toLong()
         return try {
-            // Indian number formatting: 1,50,000
             val formatter = android.icu.text.DecimalFormat("#,##,##0")
             formatter.format(whole)
         } catch (e: Throwable) {
-            // Fallback for older Android versions
             String.format("%,d", whole)
         }
     }

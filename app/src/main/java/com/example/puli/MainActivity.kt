@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         // Principal: max 7 digits, integers only
         binding.edtAmount.filters = arrayOf(android.text.InputFilter.LengthFilter(7))
 
-        // ROI: custom decimal filter (max 2 before, 2 after)
+        // ROI: max 2 before decimal, 2 after
         binding.edtRate.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -45,17 +45,14 @@ class MainActivity : AppCompatActivity() {
 
                 var corrected = input
 
-                // Max 2 digits before decimal
                 if (before.length > 2) {
                     corrected = before.take(2)
                     if (after.isNotEmpty()) corrected += "." + after.take(2)
-                }
-                // Max 2 digits after decimal
-                else if (after.length > 2) {
+                } else if (after.length > 2) {
                     corrected = before + "." + after.take(2)
                 }
 
-                // Prevent leading zeros (e.g., "00.5" → "0.5")
+                // Prevent leading zeros like "00.5"
                 if (before.length > 1 && before.startsWith("0")) {
                     corrected = before.drop(1)
                     if (after.isNotEmpty()) corrected += "." + after.take(2)
@@ -117,7 +114,7 @@ class MainActivity : AppCompatActivity() {
         val date2 = try { dateFormat.parse(date2Str) } catch (e: Exception) { null }
 
         if (date1 == null || date2 == null) {
-            binding.txtResult.text = "⚠️ Invalid date"
+            binding.txtResult.text = "⚠️ Invalid date format"
             return
         }
 
@@ -133,11 +130,11 @@ class MainActivity : AppCompatActivity() {
         val total = amount + interest
 
         // Format with Indian comma style
-        binding.txtPrincipal.text = formatIndianNumber(amount)
-        binding.txtInterest.text = formatIndianNumber(interest)
-        binding.txtTotal.text = formatIndianNumber(total)
+        binding.txtPrincipal.text = "₹${formatIndianNumber(amount)}"
+        binding.txtInterest.text = "₹${formatIndianNumber(interest)}"
+        binding.txtTotal.text = "₹${formatIndianNumber(total)}"
 
-        // Duration: approximate
+        // Duration approximation
         val years = daysBetween / 365
         val rem = (daysBetween % 365).toInt()
         val months = rem / 30
@@ -154,7 +151,7 @@ class MainActivity : AppCompatActivity() {
             { _, y, m, d ->
                 val selected = Calendar.getInstance().apply {
                     set(y, m, d)
-                    set(Calendar.HOUR, 0)
+                    set(Calendar.HOUR_OF_DAY, 0)
                     set(Calendar.MINUTE, 0)
                     set(Calendar.SECOND, 0)
                     set(Calendar.MILLISECOND, 0)
@@ -168,12 +165,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun formatIndianNumber(value: Double): String {
-        // Use Indian locale formatting (works on API 24+)
         return try {
+            // Use ICU for proper Indian number formatting (API 24+)
             val formatter = android.icu.text.DecimalFormat("#,##,##0.00")
             formatter.format(value)
         } catch (e: Throwable) {
-            // Fallback for older Android versions
+            // Fallback for older devices
             String.format("%.2f", value)
         }
     }

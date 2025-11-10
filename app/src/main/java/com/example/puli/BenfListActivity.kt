@@ -19,7 +19,7 @@ class BenfListActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        fetchAndParseXml("https://yourdomain.com/data.xml") { list ->
+        fetchAndParseXml("https://drive.google.com/file/d/1zfNXAWzqTUFUSDTeEDiJic7bkh6CnOG7/view?usp=sharing") { list ->
             recyclerView.adapter = BenfAdapter(this, list)
         }
     }

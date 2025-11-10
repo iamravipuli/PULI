@@ -12,8 +12,10 @@ class PinActivity : AppCompatActivity() {
     private lateinit var edtPin: EditText
     private lateinit var btnSubmit: Button
 
-    // 🔒 Hardcoded PIN - cannot be changed by user
-    private const val APP_PIN = "1964"
+    // ✅ Move const inside companion object
+    companion object {
+        private const val APP_PIN = "1964"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

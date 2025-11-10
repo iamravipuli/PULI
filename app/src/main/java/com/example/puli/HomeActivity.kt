@@ -12,7 +12,7 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
 
         findViewById<Button>(R.id.btnCredit).setOnClickListener {
-            // TODO: Add Credit logic later
+            startActivity(Intent(this, BenfListActivity::class.java))
         }
 
         findViewById<Button>(R.id.btnDebit).setOnClickListener {

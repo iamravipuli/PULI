@@ -55,7 +55,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.2"
-                    app:boxCornerRadius="12dp">
+                   app:boxCornerRadiusTopStart="12dp"
+app:boxCornerRadiusTopEnd="12dp"
+app:boxCornerRadiusBottomStart="12dp"
+app:boxCornerRadiusBottomEnd="12dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edtAmount"
@@ -87,7 +90,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.2"
-                    app:boxCornerRadius="12dp">
+                    app:boxCornerRadiusTopStart="12dp"
+app:boxCornerRadiusTopEnd="12dp"
+app:boxCornerRadiusBottomStart="12dp"
+app:boxCornerRadiusBottomEnd="12dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edtRate"

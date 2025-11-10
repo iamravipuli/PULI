@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.puli.databinding.ActivityMainBinding
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.floor
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,7 +24,6 @@ class MainActivity : AppCompatActivity() {
             showDatePicker { selectedDate ->
                 binding.txtDate1.text = dateFormat.format(selectedDate)
                 date1 = selectedDate
-                updateDuration(date1, date2)
             }
         }
 
@@ -33,37 +31,63 @@ class MainActivity : AppCompatActivity() {
             showDatePicker { selectedDate ->
                 binding.txtDate2.text = dateFormat.format(selectedDate)
                 date2 = selectedDate
-                updateDuration(date1, date2)
             }
         }
 
         binding.btnCalculate.setOnClickListener {
-            val amount = binding.edtAmount.text.toString().toDoubleOrNull() ?: 0.0
-            val roi = binding.edtRate.text.toString().toDoubleOrNull() ?: 0.0
+            val amountStr = binding.edtAmount.text.toString().trim()
+            val rateStr = binding.edtRate.text.toString().trim()
+
+            if (amountStr.isEmpty() || rateStr.isEmpty()) {
+                binding.txtResult.text = "⚠️ Please enter amount and rate."
+                return@setOnClickListener
+            }
+
+            val amount = amountStr.toDoubleOrNull()
+            val roi = rateStr.toDoubleOrNull()
+
+            if (amount == null || amount <= 0) {
+                binding.txtResult.text = "⚠️ Amount must be a positive number."
+                return@setOnClickListener
+            }
+
+            if (roi == null || roi < 0) {
+                binding.txtResult.text = "⚠️ Rate cannot be negative."
+                return@setOnClickListener
+            }
 
             if (date1 == null || date2 == null) {
-                binding.txtResult.text = "Please select both dates."
+                binding.txtResult.text = "⚠️ Please select both dates."
                 return@setOnClickListener
             }
 
-            val daysBetween = ((date2!!.time - date1!!.time) / (1000 * 60 * 60 * 24)).toInt()
-            if (daysBetween < 0) {
-                binding.txtResult.text = "End date must be after start date."
+            val diffMillis = date2!!.time - date1!!.time
+            if (diffMillis < 0) {
+                binding.txtResult.text = "⚠️ End date must be on or after start date."
                 return@setOnClickListener
             }
 
-            // Simple Interest: (P × R × T) / (100 × 30)
+            // ✅ INCLUSIVE DURATION: Add 1 day so both start and end are counted
+            val daysBetween = (diffMillis / (24 * 60 * 60 * 1000)).toInt() + 1
+
+            // Simple Interest: I = (P × R × T) / (100 × 30)
+            // R = ₹ per ₹100 per month → monthly rate = R / 100
+            // T in months = days / 30 → so I = P × (R/100) × (days/30) = (P × R × days) / (100 × 30)
             val interest = (amount * roi * daysBetween) / (100 * 30)
             val total = amount + interest
 
-            val duration = convertDays(daysBetween)
+            // Convert days to years, months, days (approximate)
+            val years = daysBetween / 365
+            val remainingAfterYears = daysBetween % 365
+            val months = remainingAfterYears / 30
+            val days = remainingAfterYears % 30
 
-            binding.txtPrincipal.text = "Principal Amount: ₹${"%.2f".format(amount)}"
-            binding.txtInterest.text = "Interest Amount: ₹${"%.2f".format(interest)}"
-            binding.txtTotal.text = "Total Amount (P + I): ₹${"%.2f".format(total)}"
-            binding.txtDuration.text =
-                "Duration: ${duration["years"]} years, ${duration["months"]} months, ${duration["days"]} days"
-            binding.txtResult.text = "Interest calculated successfully!"
+            // Update UI
+            binding.txtPrincipal.text = "₹${"%.2f".format(amount)}"
+            binding.txtInterest.text = "₹${"%.2f".format(interest)}"
+            binding.txtTotal.text = "₹${"%.2f".format(total)}"
+            binding.txtDuration.text = "${years}y ${months}m ${days}d"
+            binding.txtResult.text = "✓ Calculated for $daysBetween day(s)"
         }
     }
 
@@ -72,30 +96,20 @@ class MainActivity : AppCompatActivity() {
         DatePickerDialog(
             this,
             { _, year, month, day ->
-                val selected = Calendar.getInstance()
-                selected.set(year, month, day)
+                val selected = Calendar.getInstance().apply {
+                    set(Calendar.YEAR, year)
+                    set(Calendar.MONTH, month)
+                    set(Calendar.DAY_OF_MONTH, day)
+                    set(Calendar.HOUR_OF_DAY, 0)
+                    set(Calendar.MINUTE, 0)
+                    set(Calendar.SECOND, 0)
+                    set(Calendar.MILLISECOND, 0)
+                }
                 onDateSelected(selected.time)
             },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
         ).show()
-    }
-
-    private fun convertDays(days: Int): Map<String, Int> {
-        val years = floor(days / 365.0).toInt()
-        val months = floor((days % 365) / 30.0).toInt()
-        val remainingDays = days - (years * 365) - (months * 30)
-        return mapOf("years" to years, "months" to months, "days" to remainingDays)
-    }
-
-    private fun updateDuration(date1: Date?, date2: Date?) {
-        if (date1 == null || date2 == null) return
-        val daysBetween = ((date2.time - date1.time) / (1000 * 60 * 60 * 24)).toInt()
-        if (daysBetween >= 0) {
-            val duration = convertDays(daysBetween)
-            binding.txtDuration.text =
-                "Duration: ${duration["years"]} years, ${duration["months"]} months, ${duration["days"]} days"
-        }
     }
 }

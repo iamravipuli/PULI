@@ -11,7 +11,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- App Title -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,23 +21,20 @@
             android:textColor="#1A73E8"
             android:layout_marginBottom="20dp" />
 
-        <!-- ✨ INPUT SECTION - Light Blue Background -->
+        <!-- Input Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="#E8F0FE"
-            android:padding="20dp"
-            android:layout_marginBottom="24dp"
-            android:elevation="4dp"
-            android:translationZ="4dp">
+            android:padding="16dp"
+            android:layout_marginBottom="20dp">
 
-            <!-- Amount Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="12dp">
 
                 <TextView
                     android:layout_width="0dp"
@@ -50,30 +46,23 @@
                     android:gravity="end"
                     android:paddingEnd="12dp" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <!-- Use basic EditText to avoid Material issues -->
+                <EditText
+                    android:id="@+id/edtAmount"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.2"
-                   app:boxCornerRadiusTopStart="12dp"
-app:boxCornerRadiusTopEnd="12dp"
-app:boxCornerRadiusBottomStart="12dp"
-app:boxCornerRadiusBottomEnd="12dp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edtAmount"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="numberDecimal" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:inputType="numberDecimal"
+                    android:background="@drawable/rounded_edittext"
+                    android:padding="12dp"
+                    android:textSize="16sp" />
             </LinearLayout>
 
-            <!-- Rate Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="12dp">
 
                 <TextView
                     android:layout_width="0dp"
@@ -85,25 +74,17 @@ app:boxCornerRadiusBottomEnd="12dp">
                     android:gravity="end"
                     android:paddingEnd="12dp" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <EditText
+                    android:id="@+id/edtRate"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.2"
-                    app:boxCornerRadiusTopStart="12dp"
-app:boxCornerRadiusTopEnd="12dp"
-app:boxCornerRadiusBottomStart="12dp"
-app:boxCornerRadiusBottomEnd="12dp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edtRate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="numberDecimal" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:inputType="numberDecimal"
+                    android:background="@drawable/rounded_edittext"
+                    android:padding="12dp"
+                    android:textSize="16sp" />
             </LinearLayout>
 
-            <!-- Start Date Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -120,15 +101,14 @@ app:boxCornerRadiusBottomEnd="12dp">
                     android:gravity="end"
                     android:paddingEnd="12dp" />
 
-                <com.google.android.material.button.MaterialButton
+                <Button
                     android:id="@+id/btnDate1"
                     android:layout_width="0dp"
-                    android:layout_height="52dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1.2"
                     android:text="Select"
-                    android:textColor="#FFFFFF"
-                    app:cornerRadius="12dp"
-                    app:backgroundTint="#34A853" />
+                    android:backgroundTint="#34A853"
+                    android:textColor="#FFFFFF" />
             </LinearLayout>
 
             <TextView
@@ -139,9 +119,8 @@ app:boxCornerRadiusBottomEnd="12dp">
                 android:textSize="14sp"
                 android:textColor="#5F6368"
                 android:layout_marginStart="40dp"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="12dp" />
 
-            <!-- End Date Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -158,15 +137,14 @@ app:boxCornerRadiusBottomEnd="12dp">
                     android:gravity="end"
                     android:paddingEnd="12dp" />
 
-                <com.google.android.material.button.MaterialButton
+                <Button
                     android:id="@+id/btnDate2"
                     android:layout_width="0dp"
-                    android:layout_height="52dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1.2"
                     android:text="Select"
-                    android:textColor="#FFFFFF"
-                    app:cornerRadius="12dp"
-                    app:backgroundTint="#EA4335" />
+                    android:backgroundTint="#EA4335"
+                    android:textColor="#FFFFFF" />
             </LinearLayout>
 
             <TextView
@@ -177,32 +155,27 @@ app:boxCornerRadiusBottomEnd="12dp">
                 android:textSize="14sp"
                 android:textColor="#5F6368"
                 android:layout_marginStart="40dp"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="16dp" />
 
-            <!-- Calculate Button (Centered) -->
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/btnCalculate"
                 android:layout_width="220dp"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
                 android:text="Calculate Interest"
-                android:textColor="#FFFFFF"
-                app:cornerRadius="16dp"
-                app:backgroundTint="#1A73E8" />
+                android:backgroundTint="#1A73E8"
+                android:textColor="#FFFFFF" />
 
-        </LinearLayout> <!-- End Input Section -->
+        </LinearLayout>
 
-        <!-- ✨ RESULT SECTION - Light Green Background -->
+        <!-- Result Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="#E6F4EA"
-            android:padding="20dp"
-            android:elevation="4dp"
-            android:translationZ="4dp">
+            android:padding="16dp">
 
-            <!-- Result Header -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -210,16 +183,14 @@ app:boxCornerRadiusBottomEnd="12dp">
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#34A853"
-                android:layout_marginBottom="16dp"
-                android:gravity="center" />
+                android:gravity="center"
+                android:layout_marginBottom="16dp" />
 
-            <!-- Principal Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="12dp">
-
+                android:layout_marginBottom="10dp">
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -229,7 +200,6 @@ app:boxCornerRadiusBottomEnd="12dp">
                     android:textColor="#202124"
                     android:gravity="end"
                     android:paddingEnd="12dp" />
-
                 <TextView
                     android:id="@+id/txtPrincipal"
                     android:layout_width="0dp"
@@ -237,17 +207,14 @@ app:boxCornerRadiusBottomEnd="12dp">
                     android:layout_weight="1"
                     android:text="₹0.00"
                     android:textSize="16sp"
-                    android:textColor="#202124"
-                    android:gravity="start" />
+                    android:textColor="#202124" />
             </LinearLayout>
 
-            <!-- Interest Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="12dp">
-
+                android:layout_marginBottom="10dp">
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -257,7 +224,6 @@ app:boxCornerRadiusBottomEnd="12dp">
                     android:textColor="#202124"
                     android:gravity="end"
                     android:paddingEnd="12dp" />
-
                 <TextView
                     android:id="@+id/txtInterest"
                     android:layout_width="0dp"
@@ -266,17 +232,14 @@ app:boxCornerRadiusBottomEnd="12dp">
                     android:text="₹0.00"
                     android:textSize="16sp"
                     android:textColor="#34A853"
-                    android:textStyle="bold"
-                    android:gravity="start" />
+                    android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- Total Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="12dp">
-
+                android:layout_marginBottom="10dp">
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -286,7 +249,6 @@ app:boxCornerRadiusBottomEnd="12dp">
                     android:textColor="#202124"
                     android:gravity="end"
                     android:paddingEnd="12dp" />
-
                 <TextView
                     android:id="@+id/txtTotal"
                     android:layout_width="0dp"
@@ -295,16 +257,14 @@ app:boxCornerRadiusBottomEnd="12dp">
                     android:text="₹0.00"
                     android:textSize="17sp"
                     android:textStyle="bold"
-                    android:textColor="#1A73E8"
-                    android:gravity="start" />
+                    android:textColor="#1A73E8" />
             </LinearLayout>
 
-            <!-- Duration Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp">
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -314,7 +274,6 @@ app:boxCornerRadiusBottomEnd="12dp">
                     android:textColor="#202124"
                     android:gravity="end"
                     android:paddingEnd="12dp" />
-
                 <TextView
                     android:id="@+id/txtDuration"
                     android:layout_width="0dp"
@@ -322,11 +281,9 @@ app:boxCornerRadiusBottomEnd="12dp">
                     android:layout_weight="1"
                     android:text="0y 0m 0d"
                     android:textSize="16sp"
-                    android:textColor="#5F6368"
-                    android:gravity="start" />
+                    android:textColor="#5F6368" />
             </LinearLayout>
 
-            <!-- Result Message -->
             <TextView
                 android:id="@+id/txtResult"
                 android:layout_width="match_parent"
@@ -335,9 +292,8 @@ app:boxCornerRadiusBottomEnd="12dp">
                 android:textSize="14sp"
                 android:textColor="#34A853"
                 android:gravity="center"
-                android:layout_marginTop="16dp" />
+                android:layout_marginTop="12dp" />
 
-        </LinearLayout> <!-- End Result Section -->
-
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

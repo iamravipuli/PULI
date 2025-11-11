@@ -15,6 +15,8 @@ class BenfAdapter(
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val txtName: TextView = view.findViewById(R.id.txtName)
+        val txtAmountDate: TextView = view.findViewById(R.id.txtAmountDate)  // ✅ Added
+        val txtInterest: TextView = view.findViewById(R.id.txtInterest)     // ✅ Added
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -23,55 +25,57 @@ class BenfAdapter(
         return ViewHolder(view)
     }
 
-override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    val item = items[position]
-    
-    // Line 1: Name
-    holder.txtName.text = item.name
-    
-    // Line 2: Amount | Date
-    val formattedAmount = try {
-        val formatter = android.icu.text.DecimalFormat("#,##,##0")
-        "₹${formatter.format(item.amount)}"
-    } catch (e: Throwable) {
-        "₹${item.amount}"
-    }
-    holder.txtAmountDate.text = "$formattedAmount | ${item.date}"
-    
-    // Line 3: Calculate interest from record date to TODAY
-    val interestText = try {
-        val sdf = java.text.SimpleDateFormat("dd-MM-yyyy", java.util.Locale.US)
-        val startDate = sdf.parse(item.date) ?: return@try "Interest: N/A"
-        val today = java.util.Date()
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = items[position]
         
-        if (today.before(startDate)) {
-            "Interest: ₹0.00 (future date)"
-        } else {
-            val diffMillis = today.time - startDate.time
-            val days = (diffMillis / (24 * 60 * 60 * 1000)).toInt() + 1 // inclusive
-            
-            // IRate = ₹ per ₹100 per month → monthly rate = IRate / 100
-            // Monthly interest = amount * (IRate / 100)
-            // Daily interest = monthly / 30
-            // Total interest = daily * days
-            val roi = item.iRate.toDoubleOrNull() ?: 0.0
-            val interest = (item.amount * roi * days) / (100 * 30)
-            
-            "Interest: ₹${String.format("%.2f", interest)}"
+        // Line 1: Name
+        holder.txtName.text = item.name
+        
+        // Line 2: Amount | Date
+        val formattedAmount = try {
+            val formatter = android.icu.text.DecimalFormat("#,##,##0")
+            "₹${formatter.format(item.amount)}"
+        } catch (e: Throwable) {
+            "₹${item.amount}"
         }
-    } catch (e: Exception) {
-        "Interest: Error"
-    }
-    
-    holder.txtInterest.text = interestText
+        holder.txtAmountDate.text = "$formattedAmount | ${item.date}"
+        
+        // Line 3: Interest (whole number, safe)
+        val interestText = try {
+            val sdf = java.text.SimpleDateFormat("dd-MM-yyyy", java.util.Locale.US)
+            val startDate = sdf.parse(item.date) ?: throw Exception("Invalid date")
+            val today = java.util.Date()
+            
+            if (today.before(startDate)) {
+                "Interest: ₹0 (future date)"
+            } else {
+                val diffMillis = today.time - startDate.time
+                val days = (diffMillis / (24 * 60 * 60 * 1000)).toInt() + 1
+                
+                val roi = item.iRate.toDoubleOrNull() ?: 0.0
+                // ✅ Convert Long to Double explicitly to avoid ambiguity
+                val interest = (item.amount.toDouble() * roi * days) / (100.0 * 30.0)
+                
+                // ✅ Safe rounding to whole number
+                if (interest.isFinite()) {
+                    "Interest: ₹${Math.round(interest).toLong()}"
+                } else {
+                    "Interest: ₹0"
+                }
+            }
+        } catch (e: Exception) {
+            "Interest: Error"
+        }
+        
+        holder.txtInterest.text = interestText
 
-    holder.itemView.setOnClickListener {
-        val intent = Intent(context, BenfDetailActivity::class.java).apply {
-            putExtra("item", item)
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, BenfDetailActivity::class.java).apply {
+                putExtra("item", item)
+            }
+            context.startActivity(intent)
         }
-        context.startActivity(intent)
     }
-}
 
     override fun getItemCount() = items.size
 }

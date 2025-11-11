@@ -20,7 +20,7 @@ class BenfListActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         // 🔁 REPLACE WITH YOUR ACTUAL XML URL
-        fetchAndParseXml("https://drive.google.com/file/d/1zfNXAWzqTUFUSDTeEDiJic7bkh6CnOG7/view?usp=sharing") { list ->
+        fetchAndParseXml("https://drive.google.com/file/d/1zfNXAWzqTUFUSDTeEDiJic7bkh6CnOG7/view?pli=1") { list ->
             recyclerView.adapter = BenfAdapter(this, list)
         }
     }

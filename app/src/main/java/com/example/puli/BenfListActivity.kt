@@ -25,72 +25,72 @@ class BenfListActivity : AppCompatActivity() {
         }
     }
 
-   private fun fetchAndParseXml(urlString: String, onSuccess: (List<BenfDetails>) -> Unit) {
-    Thread {
-        try {
-            val url = URL(urlString)
-            (url.openConnection() as HttpURLConnection).apply {
-                requestMethod = "GET"
-                connectTimeout = 10000
-                readTimeout = 10000
+    private fun fetchAndParseXml(urlString: String, onSuccess: (List<BenfDetails>) -> Unit) {
+        Thread {
+            try {
+                val url = URL(urlString)
+                (url.openConnection() as HttpURLConnection).apply {
+                    requestMethod = "GET"
+                    connectTimeout = 10000
+                    readTimeout = 10000
 
-                if (responseCode == 200) {
-                    val factory = XmlPullParserFactory.newInstance()
-                    factory.isNamespaceAware = true  // ✅ Handle namespaces
-                    val parser = factory.newPullParser()
-                    parser.setInput(inputStream, null)
+                    if (responseCode == 200) {
+                        val factory = XmlPullParserFactory.newInstance()
+                        factory.isNamespaceAware = true
+                        val parser = factory.newPullParser()
+                        parser.setInput(inputStream, null)
 
-                    val list = mutableListOf<BenfDetails>()
-                    var current: BenfDetails? = null
-                    var tagName = ""
+                        val list = mutableListOf<BenfDetails>()
+                        var current: BenfDetails? = null
+                        var tagName = ""
 
-                    var eventType = parser.eventType
-                    while (eventType != XmlPullParser.END_DOCUMENT) {
-                        when (eventType) {
-                            XmlPullParser.START_TAG -> {
-                                tagName = parser.name  // local name, ignores namespace URI
-                                if (tagName == "BenfDetails") {
-                                    current = BenfDetails(0, "", 0, "", "", "")
+                        var eventType = parser.eventType
+                        while (eventType != XmlPullParser.END_DOCUMENT) {
+                            when (eventType) {
+                                XmlPullParser.START_TAG -> {
+                                    tagName = parser.name
+                                    if (tagName == "BenfDetails") {
+                                        current = BenfDetails(0, "", 0, "", "", "")
+                                    }
                                 }
-                            }
-                            XmlPullParser.TEXT -> {
-                                val text = parser.text.trim()
-                                if (text.isNotEmpty()) {
-                                    when (tagName) {
-                                        "RID" -> current?.rid = text.toInt()
-                                        "name" -> current?.name = text
-                                        "amount" -> current?.amount = text.toLong()
-                                        "date" -> current?.date = text
-                                        "IRate" -> current?.iRate = text
-                                        "Remarks" -> current?.remarks = text
+                                XmlPullParser.TEXT -> {
+                                    val text = parser.text.trim()
+                                    if (text.isNotEmpty() && current != null) {
+                                        when (tagName) {
+                                            "RID" -> current.rid = text.toInt()
+                                            "name" -> current.name = text
+                                            "amount" -> current.amount = text.toLong()
+                                            "date" -> current.date = text
+                                            "IRate" -> current.iRate = text
+                                            // ✅ REMARKS IS SKIPPED — NO PARSING
+                                        }
+                                    }
+                                }
+                                XmlPullParser.END_TAG -> {
+                                    if (parser.name == "BenfDetails" && current != null) {
+                                        list.add(current!!)
+                                        current = null
                                     }
                                 }
                             }
-                            XmlPullParser.END_TAG -> {
-                                if (parser.name == "BenfDetails" && current != null) {
-                                    list.add(current!!)
-                                    current = null
-                                }
-                            }
+                            eventType = parser.next()
                         }
-                        eventType = parser.next()
-                    }
 
-                    runOnUiThread {
-                        if (list.isEmpty()) {
-                            Toast.makeText(this@BenfListActivity, "No beneficiary data found", Toast.LENGTH_LONG).show()
+                        runOnUiThread {
+                            if (list.isEmpty()) {
+                                Toast.makeText(this@BenfListActivity, "No beneficiary data found", Toast.LENGTH_LONG).show()
+                            }
+                            onSuccess(list)
                         }
-                        onSuccess(list)
+                    } else {
+                        showError("HTTP ${responseCode}")
                     }
-                } else {
-                    showError("HTTP ${responseCode}")
                 }
+            } catch (e: Exception) {
+                showError("Load failed: ${e.message}")
             }
-        } catch (e: Exception) {
-            showError("Load failed: ${e.message}")
-        }
-    }.start()
-}
+        }.start()
+    }
 
     private fun showError(message: String) {
         runOnUiThread {

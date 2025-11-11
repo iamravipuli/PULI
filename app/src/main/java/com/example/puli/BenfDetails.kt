@@ -5,10 +5,10 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class BenfDetails(
-    val rid: Int,
-    val name: String,
-    val amount: Long,
-    val date: String,
-    val iRate: String,
-    val remarks: String
+    var rid: Int,
+    var name: String,
+    var amount: Long,
+    var date: String,
+    var iRate: String,
+    var remarks: String
 ) : Parcelable

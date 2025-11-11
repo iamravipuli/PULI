@@ -10,5 +10,5 @@ data class BenfDetails(
     var amount: Long,
     var date: String,
     var iRate: String,
-    var remarks: String
+    var remarks: String = "" // Default to empty (ignored during parse)
 ) : Parcelable

@@ -63,6 +63,7 @@ class BenfListActivity : AppCompatActivity() {
                                             "amount" -> current.amount = text.toLong()
                                             "date" -> current.date = text
                                             "IRate" -> current.iRate = text
+                                            "Remarks" -> current.remarks = text 
                                             // ✅ SKIPPING "Remarks" to avoid unescaped &/< issues
                                         }
                                     }

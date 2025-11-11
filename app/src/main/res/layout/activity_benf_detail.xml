@@ -2,51 +2,49 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="#F8F9FA">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="24dp">
 
-        <!-- Header -->
+        <!-- Beneficiary Name (Header) -->
         <TextView
             android:id="@+id/txtName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="#1A73E8"
-            android:layout_marginBottom="20dp"
-            android:gravity="center" />
+            android:gravity="center"
+            android:layout_marginBottom="24dp" />
 
-        <!-- Section: Principal & Date -->
+        <!-- Details Section -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="DETAILS"
+            android:text="CREDIT DETAILS"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#5F6368"
-            android:layout_marginBottom="12dp" />
+            android:textColor="#1A73E8"
+            android:layout_marginBottom="16dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginBottom="12dp">
-
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Amount"
+                android:text="Principal Amount"
                 android:textSize="16sp"
                 android:textColor="#202124"
                 android:gravity="end"
                 android:paddingEnd="12dp" />
-
             <TextView
                 android:id="@+id/txtAmount"
                 android:layout_width="0dp"
@@ -62,7 +60,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginBottom="12dp">
-
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -72,7 +69,6 @@
                 android:textColor="#202124"
                 android:gravity="end"
                 android:paddingEnd="12dp" />
-
             <TextView
                 android:id="@+id/txtDate"
                 android:layout_width="0dp"
@@ -88,7 +84,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginBottom="20dp">
-
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -98,7 +93,6 @@
                 android:textColor="#202124"
                 android:gravity="end"
                 android:paddingEnd="12dp" />
-
             <TextView
                 android:id="@+id/txtIRate"
                 android:layout_width="0dp"
@@ -109,42 +103,57 @@
                 android:gravity="start" />
         </LinearLayout>
 
-        <!-- Section: Calculated Interest -->
+        <!-- Calculated Interest Section -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="INTEREST TO DATE"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#5F6368"
-            android:layout_marginBottom="12dp" />
+            android:textColor="#1A73E8"
+            android:layout_marginBottom="16dp" />
 
-        <TextView
-            android:id="@+id/txtCalculatedInterest"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#EA4335"
-            android:layout_marginBottom="20dp"
-            android:gravity="center" />
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Accrued Interest"
+                android:textSize="16sp"
+                android:textColor="#202124"
+                android:gravity="end"
+                android:paddingEnd="12dp" />
+            <TextView
+                android:id="@+id/txtCalculatedInterest"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="#EA4335"
+                android:gravity="start" />
+        </LinearLayout>
 
-        <!-- Remarks -->
+        <!-- Remarks Section -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="REMARKS"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#5F6368"
-            android:layout_marginBottom="8dp" />
+            android:textColor="#1A73E8"
+            android:layout_marginBottom="16dp" />
 
         <TextView
             android:id="@+id/txtRemarks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="15sp"
-            android:textColor="#202124"
+            android:textColor="#5F6368"
             android:lineSpacingExtra="4dp" />
 
     </LinearLayout>

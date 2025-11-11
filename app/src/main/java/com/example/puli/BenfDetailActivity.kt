@@ -16,7 +16,7 @@ class BenfDetailActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.txtAmount).text = "Amount: ₹${formatIndianNumber(item.amount.toDouble())}"
         findViewById<TextView>(R.id.txtDate).text = "Date: ${item.date}"
         findViewById<TextView>(R.id.txtIRate).text = "Interest Rate: ${item.iRate}%"
-        findViewById<TextView>(R.id.txtRemarks).text = "Remarks: ${item.remarks}"
+        findViewById<TextView>(R.id.txtRemarks).text = "Remarks: ${item.remarks}" // Will be empty
     }
 
     private fun formatIndianNumber(value: Double): String {

@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="#FFFFFF">
 
-    <!-- App Title (Centered, with top margin) -->
+    <!-- App Title -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,46 +16,109 @@
         android:textColor="#1A73E8"
         android:gravity="center"
         android:paddingTop="40dp"
-        android:paddingBottom="40dp"
-        android:background="#FFFFFF" />
+        android:paddingBottom="20dp" />
 
-    <!-- Credit Button (Full Width, Blue Section) -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnCredit"
+    <!-- Row 1: Credit & Debit (Side by Side) -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:text="Credit"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="#1A73E8"
-        app:cornerRadius="0dp"
-        app:backgroundTint="#E6F4EA"
-        style="?android:attr/borderlessButtonStyle" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:background="#FFFFFF">
 
-    <!-- Debit Button (Full Width, Green Section) -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnDebit"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:text="Debit"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="#34A853"
-        app:cornerRadius="0dp"
-        app:backgroundTint="#FFF8E1"
-        style="?android:attr/borderlessButtonStyle" />
+        <!-- Credit Tile -->
+        <LinearLayout
+            android:id="@+id/tileCredit"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:background="#E8F0FE"
+            android:gravity="center"
+            android:padding="16dp">
 
-    <!-- Calculate Button (Full Width, Orange Section) -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnCalculate"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Credit"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#1A73E8"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Amount & Interest"
+                android:textSize="14sp"
+                android:textColor="#5F6368"
+                android:gravity="center"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+        <!-- Debit Tile -->
+        <LinearLayout
+            android:id="@+id/tileDebit"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:background="#E6F4EA"
+            android:gravity="center"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Debit"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#34A853"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Payments & Records"
+                android:textSize="14sp"
+                android:textColor="#5F6368"
+                android:gravity="center"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Row 2: Calculate (Full-width Rectangle) -->
+    <LinearLayout
+        android:id="@+id/tileCalculate"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:text="Calculate Interest"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="#FF9800"
-        app:cornerRadius="0dp"
-        app:backgroundTint="#E8F0FE"
-        style="?android:attr/borderlessButtonStyle" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="#FFF8E1"
+        android:gravity="center"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Calculate Interest"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#FF9800"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Interest & Projection"
+            android:textSize="14sp"
+            android:textColor="#5F6368"
+            android:gravity="center"
+            android:layout_marginTop="4dp" />
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -102,19 +102,14 @@ class BenfDetailActivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
 
-                // Calculate days (inclusive)
                 val days = ((projectedDate.time - creditDate.time) / (24 * 60 * 60 * 1000)).toInt() + 1
-
-                // Calculate interest
                 val roi = item.iRate.toDoubleOrNull() ?: 0.0
                 val interest = (item.amount.toDouble() * roi * days) / (100.0 * 30.0)
                 val interestRounded = if (interest.isFinite()) Math.round(interest).toLong() else 0L
 
-                // Format values
                 val interestFormatted = formatIndianNumber(interestRounded)
                 val totalFormatted = formatIndianNumber(item.amount + interestRounded)
 
-                // Duration in Y/M/D
                 val years = days / 365
                 val rem = days % 365
                 val months = rem / 30
@@ -125,6 +120,10 @@ class BenfDetailActivity : AppCompatActivity() {
                 txtProjectedInterest.text = "₹$interestFormatted"
                 txtTotalProjected.text = "₹$totalFormatted"
                 txtProjectedDuration.text = durationText
+
+                // ✅ Clarity note
+                val note = "Interest calculated from ${item.date} to $projectedDateStr"
+                findViewById<TextView>(R.id.txtProjectionNote).text = note
 
             } catch (e: Exception) {
                 Toast.makeText(this, "Invalid date", Toast.LENGTH_SHORT).show()
@@ -145,7 +144,7 @@ class BenfDetailActivity : AppCompatActivity() {
             }
 
             val diffMillis = today.time - startDate.time
-            val totalDays = (diffMillis / (24 * 60 * 60 * 1000)).toInt() + 1 // inclusive
+            val totalDays = (diffMillis / (24 * 60 * 60 * 1000)).toInt() + 1
 
             val years = totalDays / 365
             val remainingAfterYears = totalDays % 365

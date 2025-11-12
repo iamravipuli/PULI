@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9FA">
+    android:background="#F5F7FA">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,35 +18,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="PULI"
-            android:textSize="28sp"
+            android:textSize="30sp"
             android:textStyle="bold"
-            android:textColor="#1A73E8"
-            android:layout_marginBottom="48dp" />
+            android:textColor="#2196F3"
+            android:layout_marginBottom="52dp" />
 
-        <!-- Credit & Debit Buttons (Side by Side, No Icons) -->
+        <!-- Credit & Debit: Square Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:layout_marginBottom="32dp"
-            android:paddingStart="24dp"
-            android:paddingEnd="24dp">
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnCredit"
-                android:layout_width="0dp"
-                android:layout_height="80dp"
-                android:layout_weight="1"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
                 android:text="Credit"
-                android:textSize="17sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="#FFFFFF"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                app:cornerRadius="16dp"
-                app:backgroundTint="#34A853"
-                style="@style/Widget.Material3.Button" />
+                app:cornerRadius="12dp"
+                app:backgroundTint="#4CAF50" />
 
             <View
                 android:layout_width="16dp"
@@ -54,35 +49,33 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDebit"
-                android:layout_width="0dp"
-                android:layout_height="80dp"
-                android:layout_weight="1"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
                 android:text="Debit"
-                android:textSize="17sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="#FFFFFF"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                app:cornerRadius="16dp"
-                app:backgroundTint="#EA4335"
-                style="@style/Widget.Material3.Button" />
+                app:cornerRadius="12dp"
+                app:backgroundTint="#F44336" />
 
         </LinearLayout>
 
-        <!-- Calculate Button (No Icon) -->
+        <!-- Single gap -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <!-- Calculate: Rectangular Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCalculate"
-            android:layout_width="240dp"
-            android:layout_height="80dp"
-            android:text="Calculate"
+            android:layout_width="280dp"
+            android:layout_height="64dp"
+            android:text="Calculate Interest"
             android:textSize="17sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            app:cornerRadius="16dp"
-            app:backgroundTint="#1A73E8"
-            style="@style/Widget.Material3.Button" />
+            app:cornerRadius="12dp"
+            app:backgroundTint="#2196F3" />
 
     </LinearLayout>
 </ScrollView>

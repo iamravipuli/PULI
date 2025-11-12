@@ -1,5 +1,5 @@
 package com.example.puli
- 
+ import android.widget.LinearLayout
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button

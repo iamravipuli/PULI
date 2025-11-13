@@ -2,7 +2,8 @@ package com.example.puli
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -21,26 +22,28 @@ class PinActivity : AppCompatActivity() {
         setContentView(R.layout.activity_pin)
 
         edtPin = findViewById(R.id.edtPin)
-        val btnSubmit = findViewById<Button>(R.id.btnSubmit)
-        
+
+       
         fetchAndParsePinXml("https://raw.githubusercontent.com/socialmediawestgodavari-spec/puli-data/refs/heads/main/akey") { pin ->
             dynamicPin = pin
         }
 
-        btnSubmit.setOnClickListener {
-            val entered = edtPin.text.toString()
-            if (entered.length != 4) {
-                Toast.makeText(this, "Enter a 4-digit PIN", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+        edtPin.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                val pin = s?.toString() ?: ""
+                if (pin.length == 4) {
+                    if (pin == dynamicPin) {
+                        startActivity(Intent(this@PinActivity, HomeActivity::class.java))
+                        finish()
+                    } else {
+                        Toast.makeText(this@PinActivity, "Invalid PIN", Toast.LENGTH_SHORT).show()
+                        edtPin.setText("")
+                    }
+                }
             }
-            if (entered == dynamicPin) {
-                startActivity(Intent(this, HomeActivity::class.java))
-                finish()
-            } else {
-                Toast.makeText(this, "Invalid PIN", Toast.LENGTH_SHORT).show()
-                edtPin.setText("")
-            }
-        }
+        })
     }
 
     private fun fetchAndParsePinXml(urlString: String, onSuccess: (String) -> Unit) {
@@ -80,12 +83,11 @@ class PinActivity : AppCompatActivity() {
                             eventType = parser.next()
                         }
 
-                      
+                  
                         val pin = buildString {
-                          
-                            append(if (p.length >= 1) p[0] else '0')                           
-                            append(if (u.length >= 2) u[1] else '0')                        
-                            append(if (l.length >= 3) l[2] else '0')                           
+                            append(if (p.length >= 1) p[0] else '0')
+                            append(if (u.length >= 2) u[1] else '0')
+                            append(if (l.length >= 3) l[2] else '0')
                             append(if (i_val.length >= 4) i_val[3] else '0')
                         }
 
@@ -105,4 +107,4 @@ class PinActivity : AppCompatActivity() {
             }
         }.start()
     }
-}
+}                  
